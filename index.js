@@ -3,9 +3,10 @@ const util = require('util');
 
 exports = module.exports = (function () {
 
-	function ParamChecker (path) {
+	function ParamChecker (opts) {
+		opts = opts || {};
 		EventEmitter.call(this);
-		this.path = path || 'body';
+		this.path = opts.path || 'body';
 	}
 
 	util.inherits(ParamChecker, EventEmitter);
