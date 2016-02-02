@@ -10,8 +10,7 @@ exports = module.exports = (function () {
 
 	util.inherits(ParamChecker, EventEmitter);
 
-	ParamChecker.prototype.check = function () {
-		var args = arguments;
+	ParamChecker.prototype.check = function (args, opts) {
 		var that = this;
 
 		return function (req, res, next) {
@@ -33,6 +32,10 @@ exports = module.exports = (function () {
 						return false;
 					}
 					break;
+				} else {
+					if (opts.replace) {
+						obj[args[i]] = opts.replace(obj[args[i]]);
+					}
 				}
 			}
 
