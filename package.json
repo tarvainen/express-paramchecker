@@ -1,6 +1,6 @@
 {
   "name": "express-paramchecker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The nodejs middleware to basically check whether all the required parameters is inside the request object.",
   "main": "index.js",
   "scripts": {
