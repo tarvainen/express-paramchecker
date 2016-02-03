@@ -30,6 +30,17 @@ Fill up your `server.js` with the content below. Note thas this is the minimalis
     var bodyparser = require('body-parser');
     var paramchecker = require('express-paramchecker');
     
+    paramchecker.on('error', function (req, res, next) {
+        res.status(400).send({
+            msg: 'Parameters missing!',
+            success: false
+        });    
+    });
+    
+    paramchecker.on('success', function (req, res, next) {
+        next();    
+    });
+    
     app.use(bodyparser.json());
     
     app.post('/feedback', paramchecker.check('name', 'email', 'content'), function (req, res, next) {
@@ -40,17 +51,3 @@ Fill up your `server.js` with the content below. Note thas this is the minimalis
     });
     
     app.listen(5000);
-    
-
-## Customization
-As default the express-paramchecker will go on if all the parameters were included in the request. If some of the parameters is missing, will the express-paramchecker send an error message as response.
-There is a way to customize the message sent on error and you can do it with the ParamChecker.setup() function.
-
-    paramchecker.setup({
-      path: 'body', // where to look at the parameters (body with the body-parser)
-      status: 400, // the response http status
-      error: { // just the message to sent as response
-        msg: 'This is a custom error.',
-        success: false
-      }
-    });
