@@ -34,6 +34,7 @@ exports = module.exports = (function () {
 					}
 					break;
 				} else {
+					opts = opts || {};
 					if (opts.replace) {
 						obj[args[i]] = opts.replace(obj[args[i]]);
 					}
