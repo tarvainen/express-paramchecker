@@ -23,7 +23,7 @@ Firstly create your package.json file with all the dependencies needed.
     
 Then run `npm install` in your project root. Npm will now install all the dependencies clarified in the package.json.
 
-Fill up your `server.js` with the content below. Note thas this is the minimalistic usage of paramchecker with Express.js.
+Fill up your `server.js` with the content below. Note that this is the minimalistic usage of paramchecker with Express.js.
 
     var express = require('express');
     var app = express();
@@ -43,7 +43,7 @@ Fill up your `server.js` with the content below. Note thas this is the minimalis
     
     app.use(bodyparser.json());
     
-    app.post('/feedback', paramchecker.check('name', 'email', 'content'), function (req, res, next) {
+    app.post('/feedback', paramchecker.check(['name', 'email', 'content']), function (req, res, next) {
     	res.status(200).send({
     		msg: 'Yah!',
     		success: true
@@ -51,3 +51,22 @@ Fill up your `server.js` with the content below. Note thas this is the minimalis
     });
     
     app.listen(5000);
+    
+## Options
+You can pass few options to ParamChecker.check(). One of those one options is the replace function. There you can declare  if you want to add or remove or replace something to all input values. Hope the example below clears it out a little.
+
+    /* Just replaces all the 'cat' values in the input with 'dog'. */
+    var replaceFunc = function (data) {
+        return data.replace('cat', 'dog');
+    }
+    
+    var opts = {
+        replace: replaceFunc
+    };
+    
+    app.post('/feedback', paramchecker.check(['name', 'email', 'content'], opts), function (req, res, next) {
+    	res.status(200).send({
+    		msg: 'Yah!',
+    		success: true
+    	});
+    });
