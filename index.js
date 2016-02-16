@@ -3,20 +3,28 @@ const util = require('util');
 
 exports = module.exports = (function () {
 
-	function ParamChecker (opts) {
-		opts = opts || {};
+	function ParamChecker () {
 		EventEmitter.call(this);
-		this.path = opts.path || 'body';
+		this.path = 'body';
+		this.debug = true;
 	}
 
 	util.inherits(ParamChecker, EventEmitter);
+
+	ParamChecker.prototype.log = function (log) {
+		if (this.debug) {
+			return console.log;
+		}
+
+		return function () {};
+	}
 
 	ParamChecker.prototype.check = function (args, opts) {
 		var that = this;
 
 		return function (req, res, next) {
 			var found = false;
-			var obj = eval('req.' + that.path);
+			var obj = req[that.path];
 
 			if (!obj) {
 				console.log('Express-paramchecker object "' + that.path + '" was not found!');
@@ -29,7 +37,7 @@ exports = module.exports = (function () {
 					try {
 						that.emit('error', req, res, next);
 					} catch (err) {
-						console.log('Express-paramchecker "onerror" not defined');
+						that.log('Express-paramchecker "onerror" not defined');
 						return false;
 					}
 					break;
@@ -45,7 +53,8 @@ exports = module.exports = (function () {
 				try {
 					that.emit('success', req, res, next);
 				} catch (err) {
-					console.log('Express-paramchecker "onsuccess" not defined');
+					that.log('Express-paramchecker "onsuccess" not defined.');
+					that.log(err);
 					return false;
 				}
 			}
